@@ -11,7 +11,7 @@ def main():
     timer = pygame.time.Clock()
     ship = Player(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2)
     while True:
-     
+        ship.update(dt)
 
         log_state()
         for event in pygame.event.get():
