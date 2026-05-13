@@ -9,16 +9,22 @@ def main():
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     dt = 0
     timer = pygame.time.Clock()
+    
+    updatable = pygame.sprite.Group()
+    drawable = pygame.sprite.Group()
+    Player.containers = (updatable,drawable)
+
     ship = Player(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2)
     while True:
-        ship.update(dt)
+        updatable.update(dt)
 
         log_state()
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 return
         screen.fill("black")
-        ship.draw(screen)
+        for sprite in drawable:
+            sprite.draw(screen)
         pygame.display.flip()
         dt = timer.tick(60) / 1000
 
