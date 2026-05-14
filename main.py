@@ -39,8 +39,10 @@ def main():
             for check_shot in shots:
                 if check_asteroid.collides_with(check_shot):
                     log_event("asteroid_shot")
-                    check_asteroid.kill()
                     check_shot.kill()
+                    #check_asteroid.kill()
+                    check_asteroid.split()
+                    
 
 
 
