@@ -6,11 +6,24 @@ from logger import log_event
 class Asteroid(CircleShape):
     def __init__(self, x, y, radius):
         super().__init__(x, y, radius)
+        self.color = "white"
+        self.flash_timer = 0
+
+    def find_color(self,dt):
+        self.flash_timer += dt
+        colors = ["red","blue","green"]
+        random.shuffle(colors)
+        if self.flash_timer >= 0.25:
+         self.flash_timer = 0
+         self.color = colors[0]
+
     
+
     def draw(self,screen):
-        pygame.draw.circle(screen,"white",self.position,self.radius,width)
+        pygame.draw.circle(screen,self.color,self.position,self.radius,width)
 
     def update(self,dt):
+        self.find_color(dt)
         movement = self.velocity * dt
         self.position += movement
 
