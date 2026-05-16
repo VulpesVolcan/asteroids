@@ -12,7 +12,13 @@ def main():
     print(f"- 'Screen width: {SCREEN_WIDTH}', - 'Screen height: {SCREEN_HEIGHT}'")
     pygame.init()
     
+    with open("highscore.txt", "r") as h:
+        highscore = h.read()
+
+
+
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+    score = 0
     dt = 0
     timer = pygame.time.Clock()
     asteroids = pygame.sprite.Group()
@@ -33,6 +39,8 @@ def main():
             if check_collision.collides_with(ship):
                 log_event("player_hit")
                 print("Game Over")
+                print(f"Score = {score}")
+                print(f"Highscore = {highscore}")
                 sys.exit()
         
         for check_asteroid in asteroids:
@@ -42,9 +50,15 @@ def main():
                     check_shot.kill()
                     #check_asteroid.kill()
                     check_asteroid.split()
+                    score += (check_asteroid.radius // 10)
+                    with open("highscore.txt", "r") as h:
+                        current_highscore_string = h.read()
+                        current_highscore = int(current_highscore_string.strip())
+                        if score > current_highscore:
+                            with open("highscore.txt", "w") as f:
+                                f.write(str(score))
+                                highscore = score
                     
-
-
 
         log_state()
         

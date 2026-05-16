@@ -17,8 +17,6 @@ class Asteroid(CircleShape):
          self.flash_timer = 0
          self.color = colors[0]
 
-    
-
     def draw(self,screen):
         pygame.draw.circle(screen,self.color,self.position,self.radius,width)
 
