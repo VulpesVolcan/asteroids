@@ -11,7 +11,7 @@ from shot import Shot
 from piercingshot import Piercing_Shot
 from scattershot import Scatter_Shot
 from powerup import Powerup
-
+from gameover import game_over_main
 
 def main():
     print(f"Starting Asteroids with pygame version: {pygame.version.ver}")
@@ -22,15 +22,11 @@ def main():
          print("Creating highscore.txt")
     
     
-    
     pygame.init()
     pygame.font.init()
 
-    with open("highscore.txt", "r") as h:
-        highscore = h.read()
-
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-    score = 0
+    score = SCORE
     dt = 0
 
     font = pygame.font.SysFont("Arial", 24)
@@ -53,24 +49,15 @@ def main():
     while True:
         updatable.update(dt)
         
+
         for check_collision in asteroids:
             if check_collision.collides_with(ship):
                 log_event("player_hit")
                 
-                with open("highscore.txt", "r") as h:
-                        current_highscore_string = h.read()
-                        current_highscore = int(current_highscore_string.strip())
-                        if score > current_highscore:
-                            with open("highscore.txt", "w") as f:
-                                f.write(str(score))
-                                highscore = score
-                
-                print("Game Over")
-                print(f"Score = {score}")
-                print(f"Highscore = {highscore}")
-                print(f"Ammo = {AMMO}")
+                game_over_main(score)
                 sys.exit()
-        
+                
+
             for check_powerup in powerups:
                 if check_powerup.collides_with(ship):
                     if check_powerup.ID == "P":
@@ -101,6 +88,7 @@ def main():
                         check_shot.kill()
                     score += (check_asteroid.radius // 10)
 
+        
         log_state()
         
         for event in pygame.event.get():
@@ -110,6 +98,7 @@ def main():
         
         for sprite in drawable:
             sprite.draw(screen)
+            
             score_surface = font.render(f"Score: {score}", False, (255, 255, 255))
             screen.blit(score_surface, (10, 10))
             scatter = AMMO.count("Scatter")
