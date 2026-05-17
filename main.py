@@ -11,15 +11,15 @@ def main():
     print(f"Starting Asteroids with pygame version: {pygame.version.ver}")
     print(f"- 'Screen width: {SCREEN_WIDTH}', - 'Screen height: {SCREEN_HEIGHT}'")
     pygame.init()
-    
+    pygame.font.init()
+
     with open("highscore.txt", "r") as h:
         highscore = h.read()
-
-
 
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     score = 0
     dt = 0
+    font = pygame.font.SysFont("Arial", 24)
     timer = pygame.time.Clock()
     asteroids = pygame.sprite.Group()
     updatable = pygame.sprite.Group()
@@ -71,6 +71,8 @@ def main():
         
         for sprite in drawable:
             sprite.draw(screen)
+            score_surface = font.render(f"Score: {score}", False, (255, 255, 255))
+            screen.blit(score_surface, (10, 10))
         pygame.display.flip()
         dt = timer.tick(60) / 1000
 
