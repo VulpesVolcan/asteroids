@@ -1,5 +1,7 @@
 import pygame
 import sys
+import random
+import os
 from constants import *
 from logger import log_state,log_event
 from player import Player
@@ -8,9 +10,19 @@ from asteroidfield import AsteroidField
 from shot import Shot
 from piercingshot import Piercing_Shot
 from scattershot import Scatter_Shot
+from powerup import Powerup
+
+
 def main():
     print(f"Starting Asteroids with pygame version: {pygame.version.ver}")
     print(f"- 'Screen width: {SCREEN_WIDTH}', - 'Screen height: {SCREEN_HEIGHT}'")
+    if not os.path.exists("highscore.txt"):
+        with open("highscore.txt", "w") as f:
+         f.write("0")
+         print("Creating highscore.txt")
+    
+    
+    
     pygame.init()
     pygame.font.init()
 
@@ -20,49 +32,74 @@ def main():
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     score = 0
     dt = 0
+
     font = pygame.font.SysFont("Arial", 24)
     timer = pygame.time.Clock()
     asteroids = pygame.sprite.Group()
     updatable = pygame.sprite.Group()
     drawable = pygame.sprite.Group()
     shots = pygame.sprite.Group()
+    powerups = pygame.sprite.Group()
     Shot.containers = (shots,drawable,updatable)
     Piercing_Shot.containers = (shots,drawable,updatable)
     Scatter_Shot.containers = (shots,drawable,updatable)
     Player.containers = (updatable,drawable)
     Asteroid.containers = (asteroids, updatable, drawable)
     AsteroidField.containers = (updatable,)
+    Powerup.containers = (powerups,drawable)
     field = AsteroidField()
 
     ship = Player(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2)
     while True:
         updatable.update(dt)
         
-        
         for check_collision in asteroids:
             if check_collision.collides_with(ship):
                 log_event("player_hit")
-                print("Game Over")
-                print(f"Score = {score}")
-                print(f"Highscore = {highscore}")
-                sys.exit()
-        
-        for check_asteroid in asteroids:
-            for check_shot in shots:
-                if check_asteroid.collides_with(check_shot):
-                    log_event("asteroid_shot")
-                    check_asteroid.split()
-                    if check_shot.radius == 5:
-                        check_shot.kill()
-                    score += (check_asteroid.radius // 10)
-                    with open("highscore.txt", "r") as h:
+                
+                with open("highscore.txt", "r") as h:
                         current_highscore_string = h.read()
                         current_highscore = int(current_highscore_string.strip())
                         if score > current_highscore:
                             with open("highscore.txt", "w") as f:
                                 f.write(str(score))
                                 highscore = score
+                
+                print("Game Over")
+                print(f"Score = {score}")
+                print(f"Highscore = {highscore}")
+                print(f"Ammo = {AMMO}")
+                sys.exit()
+        
+            for check_powerup in powerups:
+                if check_powerup.collides_with(ship):
+                    if check_powerup.ID == "P":
+                        AMMO.append("Piercing")
+                    else: AMMO.append("Scatter")
+                    check_powerup.kill()
+       
+        for check_asteroid in asteroids:
+            for check_shot in shots:
+                
+                if check_asteroid.collides_with(check_shot):
+                    check_asteroid.iframes -= dt
+                    if check_asteroid.iframes <= 0:
+                        log_event("asteroid_shot")
+                    check_asteroid.iframes = ASTEROID_IFRAMES
+                    if Asteroid.alive(check_asteroid):
+                        check_asteroid.split()
+                        random_num = random.randint(0,100)
+                        random_num2 = random.randint(1,2)
+                        if random_num > 90:
+                            if random_num2 == 1:
+                                Powerup(check_asteroid.position.x,check_asteroid.position.y,5,"P") 
+                            else: Powerup(check_asteroid.position.x,check_asteroid.position.y,5,"S")
+                            
                     
+
+                    if check_shot.radius <= 5:
+                        check_shot.kill()
+                    score += (check_asteroid.radius // 10)
 
         log_state()
         
@@ -75,6 +112,14 @@ def main():
             sprite.draw(screen)
             score_surface = font.render(f"Score: {score}", False, (255, 255, 255))
             screen.blit(score_surface, (10, 10))
+            scatter = AMMO.count("Scatter")
+            piercing = AMMO.count("Piercing")
+            ammo_surface = font.render(f"Scatter: {scatter}  Piercing {piercing}", False, (255, 255, 255))
+            screen.blit(ammo_surface, (1050,10))
+       
+       
+       
+       
         pygame.display.flip()
         dt = timer.tick(60) / 1000
 

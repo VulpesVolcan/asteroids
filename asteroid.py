@@ -8,6 +8,7 @@ class Asteroid(CircleShape):
         super().__init__(x, y, radius)
         self.color = "white"
         self.flash_timer = 0
+        self.iframes = 0
 
     def find_color(self,dt):
         self.flash_timer += dt

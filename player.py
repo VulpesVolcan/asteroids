@@ -71,24 +71,27 @@ class Player(CircleShape):
     def piercing(self):
         if self.sub_cooldown > 0:
             return
-        self.sub_cooldown = PLAYER_SPECIAL_SHOOT_COOLDOWN_SECONDS
-        bullet = Piercing_Shot(self.position[0],self.position[1],SHOT_RADIUS)
-        bullet_vector = pygame.Vector2(0, 1)
-        rotated_bullet_vector = bullet_vector.rotate(self.rotation)
-        bullet.velocity = rotated_bullet_vector * PLAYER_PIERCING_SHOOT_SPEED 
+        if "Piercing"in AMMO:
+            self.sub_cooldown = PLAYER_SPECIAL_SHOOT_COOLDOWN_SECONDS
+            bullet = Piercing_Shot(self.position[0],self.position[1],SHOT_RADIUS)
+            bullet_vector = pygame.Vector2(0, 1)
+            rotated_bullet_vector = bullet_vector.rotate(self.rotation)
+            bullet.velocity = rotated_bullet_vector * PLAYER_PIERCING_SHOOT_SPEED 
+            AMMO.remove("Piercing")
 
     def scatter(self):
         if self.cooldown > 0:
             return
-        vector = pygame.Vector2(0, 1)
-        self.cooldown = PLAYER_SHOOT_COOLDOWN_SECONDS
+        if "Scatter" in AMMO:
+            vector = pygame.Vector2(0, 1)
+            self.cooldown = PLAYER_SHOOT_COOLDOWN_SECONDS
 
-        bullet1 = Scatter_Shot(self.position.x,self.position.y,SHOT_RADIUS)
-        bullet1.velocity = vector.rotate(self.rotation) * PLAYER_SHOOT_SPEED 
+            bullet1 = Scatter_Shot(self.position.x,self.position.y,SHOT_RADIUS)
+            bullet1.velocity = vector.rotate(self.rotation) * PLAYER_SHOOT_SPEED 
         
-        bullet2 = Scatter_Shot(self.position.x,self.position.y,SHOT_RADIUS,)
-        bullet2.velocity = vector.rotate(self.rotation - 15) * PLAYER_SHOOT_SPEED 
+            bullet2 = Scatter_Shot(self.position.x,self.position.y,SHOT_RADIUS,)
+            bullet2.velocity = vector.rotate(self.rotation - 15) * PLAYER_SHOOT_SPEED 
         
-        bullet3 = Scatter_Shot(self.position.x,self.position.y,SHOT_RADIUS)
-        bullet3.velocity = vector.rotate(self.rotation + 15) * PLAYER_SHOOT_SPEED 
-        
+            bullet3 = Scatter_Shot(self.position.x,self.position.y,SHOT_RADIUS)
+            bullet3.velocity = vector.rotate(self.rotation + 15) * PLAYER_SHOOT_SPEED 
+            AMMO.remove("Scatter")
