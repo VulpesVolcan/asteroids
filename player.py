@@ -3,6 +3,7 @@ from circleshape import CircleShape
 from constants import *
 from shot import Shot
 from piercingshot import Piercing_Shot
+from scattershot import Scatter_Shot
 color = "white"
 
 class Player(CircleShape):
@@ -49,6 +50,9 @@ class Player(CircleShape):
         if keys[pygame.K_m]:
             self.piercing()
 
+        if keys[pygame.K_n]:
+            self.scatter()
+
     def move(self,dt):
         unit_vector = pygame.Vector2(0, 1)
         rotated_vector = unit_vector.rotate(self.rotation)
@@ -72,3 +76,19 @@ class Player(CircleShape):
         bullet_vector = pygame.Vector2(0, 1)
         rotated_bullet_vector = bullet_vector.rotate(self.rotation)
         bullet.velocity = rotated_bullet_vector * PLAYER_PIERCING_SHOOT_SPEED 
+
+    def scatter(self):
+        if self.cooldown > 0:
+            return
+        vector = pygame.Vector2(0, 1)
+        self.cooldown = PLAYER_SHOOT_COOLDOWN_SECONDS
+
+        bullet1 = Scatter_Shot(self.position.x,self.position.y,SHOT_RADIUS)
+        bullet1.velocity = vector.rotate(self.rotation) * PLAYER_SHOOT_SPEED 
+        
+        bullet2 = Scatter_Shot(self.position.x,self.position.y,SHOT_RADIUS,)
+        bullet2.velocity = vector.rotate(self.rotation - 15) * PLAYER_SHOOT_SPEED 
+        
+        bullet3 = Scatter_Shot(self.position.x,self.position.y,SHOT_RADIUS)
+        bullet3.velocity = vector.rotate(self.rotation + 15) * PLAYER_SHOOT_SPEED 
+        

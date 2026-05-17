@@ -7,6 +7,7 @@ from asteroid import Asteroid
 from asteroidfield import AsteroidField
 from shot import Shot
 from piercingshot import Piercing_Shot
+from scattershot import Scatter_Shot
 def main():
     print(f"Starting Asteroids with pygame version: {pygame.version.ver}")
     print(f"- 'Screen width: {SCREEN_WIDTH}', - 'Screen height: {SCREEN_HEIGHT}'")
@@ -25,8 +26,9 @@ def main():
     updatable = pygame.sprite.Group()
     drawable = pygame.sprite.Group()
     shots = pygame.sprite.Group()
-    Piercing_Shot.containers = (shots,drawable,updatable)
     Shot.containers = (shots,drawable,updatable)
+    Piercing_Shot.containers = (shots,drawable,updatable)
+    Scatter_Shot.containers = (shots,drawable,updatable)
     Player.containers = (updatable,drawable)
     Asteroid.containers = (asteroids, updatable, drawable)
     AsteroidField.containers = (updatable,)
