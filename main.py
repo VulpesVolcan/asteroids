@@ -6,7 +6,7 @@ from player import Player
 from asteroid import Asteroid
 from asteroidfield import AsteroidField
 from shot import Shot
-
+from subshot import Sub_Shot
 def main():
     print(f"Starting Asteroids with pygame version: {pygame.version.ver}")
     print(f"- 'Screen width: {SCREEN_WIDTH}', - 'Screen height: {SCREEN_HEIGHT}'")
@@ -25,6 +25,7 @@ def main():
     updatable = pygame.sprite.Group()
     drawable = pygame.sprite.Group()
     shots = pygame.sprite.Group()
+    Sub_Shot.containers = (shots,drawable,updatable)
     Shot.containers = (shots,drawable,updatable)
     Player.containers = (updatable,drawable)
     Asteroid.containers = (asteroids, updatable, drawable)
@@ -34,6 +35,7 @@ def main():
     ship = Player(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2)
     while True:
         updatable.update(dt)
+        
         
         for check_collision in asteroids:
             if check_collision.collides_with(ship):
@@ -47,9 +49,9 @@ def main():
             for check_shot in shots:
                 if check_asteroid.collides_with(check_shot):
                     log_event("asteroid_shot")
-                    check_shot.kill()
-                    #check_asteroid.kill()
                     check_asteroid.split()
+                    if check_shot.radius == 5:
+                        check_shot.kill()
                     score += (check_asteroid.radius // 10)
                     with open("highscore.txt", "r") as h:
                         current_highscore_string = h.read()
