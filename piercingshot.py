@@ -2,7 +2,7 @@ import pygame
 from circleshape import CircleShape
 from constants import SHOT_RADIUS,LINE_WIDTH
 
-class Sub_Shot(CircleShape):
+class Piercing_Shot(CircleShape):
     def __init__(self, x, y, radius):
         super().__init__(x, y, SHOT_RADIUS + 2)
     

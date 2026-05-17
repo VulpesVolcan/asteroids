@@ -2,7 +2,7 @@ import pygame
 from circleshape import CircleShape
 from constants import *
 from shot import Shot
-from subshot import Sub_Shot
+from piercingshot import Piercing_Shot
 color = "white"
 
 class Player(CircleShape):
@@ -47,7 +47,7 @@ class Player(CircleShape):
             self.shoot()
 
         if keys[pygame.K_m]:
-            self.sub()
+            self.piercing()
 
     def move(self,dt):
         unit_vector = pygame.Vector2(0, 1)
@@ -64,11 +64,11 @@ class Player(CircleShape):
         rotated_bullet_vector = bullet_vector.rotate(self.rotation)
         bullet.velocity = rotated_bullet_vector * PLAYER_SHOOT_SPEED 
            
-    def sub(self):
+    def piercing(self):
         if self.sub_cooldown > 0:
             return
-        self.sub_cooldown = PLAYER_SUB_SHOOT_COOLDOWN_SECONDS
-        bullet = Sub_Shot(self.position[0],self.position[1],SHOT_RADIUS)
+        self.sub_cooldown = PLAYER_SPECIAL_SHOOT_COOLDOWN_SECONDS
+        bullet = Piercing_Shot(self.position[0],self.position[1],SHOT_RADIUS)
         bullet_vector = pygame.Vector2(0, 1)
         rotated_bullet_vector = bullet_vector.rotate(self.rotation)
-        bullet.velocity = rotated_bullet_vector * PLAYER_SUB_SHOOT_SPEED 
+        bullet.velocity = rotated_bullet_vector * PLAYER_PIERCING_SHOOT_SPEED 
