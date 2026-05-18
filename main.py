@@ -13,29 +13,22 @@ from scattershot import Scatter_Shot
 from powerup import Powerup
 from gameover import game_over_main
 
-def main():
-    print(f"Starting Asteroids with pygame version: {pygame.version.ver}")
-    print(f"- 'Screen width: {SCREEN_WIDTH}', - 'Screen height: {SCREEN_HEIGHT}'")
-    if not os.path.exists("highscore.txt"):
-        with open("highscore.txt", "w") as f:
-         f.write("0")
-         print("Creating highscore.txt")
-    
-    
-    pygame.init()
-    pygame.font.init()
 
-    screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+    
+    
+def play_game(screen,font):
+    
     score = SCORE
     dt = 0
 
-    font = pygame.font.SysFont("Arial", 24)
+    
     timer = pygame.time.Clock()
     asteroids = pygame.sprite.Group()
     updatable = pygame.sprite.Group()
     drawable = pygame.sprite.Group()
     shots = pygame.sprite.Group()
     powerups = pygame.sprite.Group()
+    
     Shot.containers = (shots,drawable,updatable)
     Piercing_Shot.containers = (shots,drawable,updatable)
     Scatter_Shot.containers = (shots,drawable,updatable)
@@ -43,19 +36,25 @@ def main():
     Asteroid.containers = (asteroids, updatable, drawable)
     AsteroidField.containers = (updatable,)
     Powerup.containers = (powerups,drawable)
+    
     field = AsteroidField()
-
     ship = Player(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2)
+    
+    AMMO.clear
+
     while True:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                return None
+        
+        
         updatable.update(dt)
         
 
         for check_collision in asteroids:
             if check_collision.collides_with(ship):
                 log_event("player_hit")
-                
-                game_over_main(score)
-                sys.exit()
+                return score
                 
 
             for check_powerup in powerups:
@@ -91,9 +90,7 @@ def main():
         
         log_state()
         
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                return
+        
         screen.fill("black")
         
         for sprite in drawable:
@@ -106,11 +103,41 @@ def main():
             ammo_surface = font.render(f"Scatter: {scatter}  Piercing {piercing}", False, (255, 255, 255))
             screen.blit(ammo_surface, (1050,10))
        
-       
-       
-       
         pygame.display.flip()
         dt = timer.tick(60) / 1000
+
+def main():
+    pygame.init()
+    pygame.font.init()
+    screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+    font = pygame.font.SysFont("Arial", 24)
+    
+    print(f"Starting Asteroids with pygame version: {pygame.version.ver}")
+    print(f"- 'Screen width: {SCREEN_WIDTH}', - 'Screen height: {SCREEN_HEIGHT}'")
+    
+    
+    if not os.path.exists("highscore.txt"):
+        with open("highscore.txt", "w") as f:
+         f.write("0")
+         print("Creating highscore.txt")
+    
+    while True:
+        score = play_game(screen,font)
+        if score is None:
+            break
+        retry = game_over_main(score)
+ 
+        if not retry:
+            break
+
+    pygame.quit
+    
+
+
+
+
+
+
 
 if __name__ == "__main__":
     main()

@@ -1,4 +1,5 @@
 import pygame
+import sys
 from constants import *
 
 timer = pygame.time.Clock()
@@ -34,29 +35,35 @@ def game_over_main(score):
                 elif ammo == "Scatter":
                     score += 2
 
-    print("Game Over")
-    print(f"Score = {score}")
-    print(f"Highscore = {highscore}")
-    print(f"Ammo = {AMMO}")
     
     while True:
         
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                return
-            
+                return False
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_y:
+                    return True
+                elif event.key == pygame.K_n:
+                    print("Game Over")
+                    print(f"Score = {score}")
+                    print(f"Highscore = {highscore}")
+                    print(f"Ammo = {AMMO}")
+                    sys.exit()
             
             
             
             
             
             screen.fill(dark_red)
-            end_message = font.render(f"GAME OVER", False, (255,255,244))
             
+            end_message = font.render(f"GAME OVER", False, (255,255,244))
             screen.blit(end_message, (SCREEN_WIDTH / 3,  9))
-    
+            
+            restart_query = font.render(f"Try again? Y/N",False,(255,255,255))
+            screen.blit(restart_query, (SCREEN_WIDTH / 3, 400))
+            
             score_surface = font.render(f"Score: {score}", False, (255, 255, 255))
-        
             screen.blit(score_surface, (SCREEN_WIDTH / 3, 200))
 
 
