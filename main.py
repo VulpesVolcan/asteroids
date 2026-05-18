@@ -1,5 +1,4 @@
 import pygame
-import sys
 import random
 import os
 from constants import *
@@ -12,7 +11,7 @@ from piercingshot import Piercing_Shot
 from scattershot import Scatter_Shot
 from powerup import Powerup
 from gameover import game_over_main
-
+from volatileasteroid import Volatile_Asteroid
 
     
 #Manages game logic
@@ -39,7 +38,8 @@ def play_game(screen,font):
     Asteroid.containers = (asteroids, updatable, drawable)
     AsteroidField.containers = (updatable,)
     Powerup.containers = (powerups,drawable)
-    
+    Volatile_Asteroid.containers = (asteroids, updatable, drawable)
+
     #Initializes classe objects
     field = AsteroidField()
     ship = Player(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2)
@@ -77,16 +77,19 @@ def play_game(screen,font):
                     if check_asteroid.iframes <= 0:
                         log_event("asteroid_shot")
                     check_asteroid.iframes = ASTEROID_IFRAMES
-                    if Asteroid.alive(check_asteroid):
+                    print(check_asteroid.ID)
+                    if Asteroid.alive(check_asteroid) and check_asteroid.ID == "N":
                         check_asteroid.split()
-                        
-                        #Generates powerups
-                        random_num = random.randint(0,100)
-                        random_num2 = random.randint(1,2)
-                        if random_num > 90:
-                            if random_num2 == 1:
-                                Powerup(check_asteroid.position.x,check_asteroid.position.y,5,"P") 
-                            else: Powerup(check_asteroid.position.x,check_asteroid.position.y,5,"S")
+                    else: check_asteroid.detonate()
+
+
+                    #Generates powerups
+                    random_num = random.randint(0,100)
+                    random_num2 = random.randint(1,2)
+                    if random_num > 90:
+                        if random_num2 == 1:
+                            Powerup(check_asteroid.position.x,check_asteroid.position.y,5,"P") 
+                        else: Powerup(check_asteroid.position.x,check_asteroid.position.y,5,"S")
                             
                     
                     #Checks for piercing shots
