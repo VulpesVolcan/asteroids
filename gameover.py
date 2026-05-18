@@ -66,7 +66,8 @@ def game_over_main(score):
             score_surface = font.render(f"Score: {score}", False, (255, 255, 255))
             screen.blit(score_surface, (SCREEN_WIDTH / 3, 200))
 
-
+            highscore_surface = font.render(f"Highscore: {highscore}", False, (255, 255, 255))
+            screen.blit(highscore_surface, (SCREEN_WIDTH / 3, 300))
 
 
         pygame.display.flip()
