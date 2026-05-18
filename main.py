@@ -78,7 +78,9 @@ def play_game(screen,font):
                         log_event("asteroid_shot")
                     check_asteroid.iframes = ASTEROID_IFRAMES
                     print(check_asteroid.ID)
-                    if Asteroid.alive(check_asteroid) and check_asteroid.ID == "N":
+                    if not Asteroid.alive(check_asteroid):
+                        continue
+                    if check_asteroid.ID == "N":
                         check_asteroid.split()
                     else: check_asteroid.detonate()
 
