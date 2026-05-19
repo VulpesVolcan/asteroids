@@ -34,7 +34,7 @@ class AsteroidField(pygame.sprite.Sprite):
 
     def spawn(self, radius, position, velocity):
         random_num = random.randint(0,100)
-        if random_num > 80:
+        if random_num > 90:
          volatile_asteroid = Volatile_Asteroid(position.x,position.y,45)
          volatile_asteroid.velocity = velocity
          return

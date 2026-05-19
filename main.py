@@ -77,7 +77,8 @@ def play_game(screen,font):
                     if check_asteroid.iframes <= 0:
                         log_event("asteroid_shot")
                     check_asteroid.iframes = ASTEROID_IFRAMES
-                    print(check_asteroid.ID)
+                    
+                    #Checks if asteroid is alive and checks ID
                     if not Asteroid.alive(check_asteroid):
                         continue
                     if check_asteroid.ID == "N":

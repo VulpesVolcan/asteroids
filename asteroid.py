@@ -15,7 +15,6 @@ class Asteroid(CircleShape):
             self.color = "red"
    
     def find_color(self,dt):
-        
         self.flash_timer += dt
         colors = ["red","blue","green"]
         random.shuffle(colors)
