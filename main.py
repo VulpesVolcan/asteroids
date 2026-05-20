@@ -12,11 +12,12 @@ from scattershot import Scatter_Shot
 from powerup import Powerup
 from gameover import game_over_main
 from volatileasteroid import Volatile_Asteroid
-
+from comet import Comet
     
 #Manages game logic
 def play_game(screen,font):
     
+
     #Resets variables upon restart
     score = SCORE
     dt = 0
@@ -39,18 +40,21 @@ def play_game(screen,font):
     AsteroidField.containers = (updatable,)
     Powerup.containers = (powerups,drawable)
     Volatile_Asteroid.containers = (asteroids, updatable, drawable)
+    Comet.containers = (asteroids, updatable, drawable)
 
     #Initializes classe objects
     field = AsteroidField()
     ship = Player(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2)
     
-   
 
     #Manages game logic
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 return None
+          
+        
+        
         
         #Updates updatables
         updatable.update(dt)
@@ -58,9 +62,14 @@ def play_game(screen,font):
         #Checks player/asteroid collisions and sends code to gameover
         for check_collision in asteroids:
             if check_collision.collides_with(ship):
+                if check_collision.ID == "C":
+                    AMMO.append("Shield")
+                if "Sheild" in AMMO:
+                    AMMO.remove("Shield")
+                    continue
                 log_event("player_hit")
                 return score
-                
+            
             #Checks and deletes powerup
             for check_powerup in powerups:
                 if check_powerup.collides_with(ship):
@@ -73,7 +82,12 @@ def play_game(screen,font):
         for check_asteroid in asteroids:
             for check_shot in shots:
                 if check_asteroid.collides_with(check_shot):
+                    
+                    random_num = random.randint(0,100)
+                    random_num2 = random.randint(1,2)
+                    
                     check_asteroid.iframes -= dt
+                    
                     if check_asteroid.iframes <= 0:
                         log_event("asteroid_shot")
                     check_asteroid.iframes = ASTEROID_IFRAMES
@@ -81,14 +95,15 @@ def play_game(screen,font):
                     #Checks if asteroid is alive and checks ID
                     if not Asteroid.alive(check_asteroid):
                         continue
-                    if check_asteroid.ID == "N":
-                        check_asteroid.split()
-                    else: check_asteroid.detonate()
+                    if check_asteroid.ID == "V":
+                        check_asteroid.detonate()
+                        if check_asteroid.times_hit > 2:
+                            random_num = 100
+                        else: random_num = 0
+                    else: check_asteroid.split()
 
 
                     #Generates powerups
-                    random_num = random.randint(0,100)
-                    random_num2 = random.randint(1,2)
                     if random_num > 90:
                         if random_num2 == 1:
                             Powerup(check_asteroid.position.x,check_asteroid.position.y,5,"P") 
@@ -117,8 +132,9 @@ def play_game(screen,font):
             screen.blit(score_surface, (10, 10))
             scatter = AMMO.count("Scatter")
             piercing = AMMO.count("Piercing")
-            ammo_surface = font.render(f"Scatter: {scatter}  Piercing {piercing}", False, (255, 255, 255))
-            screen.blit(ammo_surface, (1050,10))
+            shield = AMMO.count("Shield")
+            ammo_surface = font.render(f"Scatter: {scatter}  Piercing {piercing}  Shield {shield}", False, (255, 255, 255))
+            screen.blit(ammo_surface, (950,10))
        
         #Renders sprites on the correct layer
         pygame.display.flip()

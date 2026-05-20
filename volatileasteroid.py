@@ -7,7 +7,6 @@ from asteroid import Asteroid
 class Volatile_Asteroid(Asteroid):
     def __init__(self, x, y, radius):
         super().__init__(x, y, radius,"V")
-        print(f"Volatile_Asteroid radius: {self.radius}")
         self.color = "red"
         self.center_color = "yellow"
         self.iframes = 0
@@ -36,21 +35,21 @@ class Volatile_Asteroid(Asteroid):
             return
         self.kill()
         log_event("asteroid_detonate")
-        new_angle = random.uniform(0,360)
-        vel1 = self.velocity.rotate(new_angle)
-        vel2 = self.velocity.rotate(-new_angle)
-        vel3 = self.velocity.rotate(new_angle / 2)
-        vel4 = self.velocity.rotate(-new_angle // 2)
-        new_radius = 5
 
-        first_shard = Asteroid(self.position[0],self.position[1],new_radius,"N")
+        vel1 = self.velocity.rotate(random.uniform(0,100))
+        vel2 = self.velocity.rotate(random.uniform(0,100))
+        vel3 = self.velocity.rotate(random.uniform(-100,-0))
+        vel4 = self.velocity.rotate(random.uniform(-100,0))
+        shard_radius = 5
+
+        first_shard = Asteroid(self.position[0],self.position[1],shard_radius,"S")
         first_shard.velocity = vel1
 
-        second_shard = Asteroid(self.position[0],self.position[1],new_radius,"N")
+        second_shard = Asteroid(self.position[0],self.position[1],shard_radius,"S")
         second_shard.velocity = vel2
 
-        third_shard = Asteroid(self.position[0],self.position[1],new_radius,"N")
+        third_shard = Asteroid(self.position[0],self.position[1],shard_radius,"S")
         third_shard.velocity = vel3
 
-        fourth_shard = Asteroid(self.position[0],self.position[1],new_radius,"N")
+        fourth_shard = Asteroid(self.position[0],self.position[1],shard_radius,"S")
         fourth_shard.velocity = vel4

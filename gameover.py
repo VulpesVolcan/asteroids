@@ -55,19 +55,19 @@ def game_over_main(score):
             
             
             
-            screen.fill(dark_red)
+        screen.fill(dark_red)
             
-            end_message = font.render(f"GAME OVER", False, (255,255,244))
-            screen.blit(end_message, (SCREEN_WIDTH / 3,  9))
+        end_message = font.render(f"GAME OVER", False, (255,255,244))
+        screen.blit(end_message, (SCREEN_WIDTH / 3,  9))
             
-            restart_query = font.render(f"Try again? Y/N",False,(255,255,255))
-            screen.blit(restart_query, (SCREEN_WIDTH / 3, 400))
+        restart_query = font.render(f"Try again? Y/N",False,(255,255,255))
+        screen.blit(restart_query, (SCREEN_WIDTH / 3, 400))
             
-            score_surface = font.render(f"Score: {score}", False, (255, 255, 255))
-            screen.blit(score_surface, (SCREEN_WIDTH / 3, 200))
+        score_surface = font.render(f"Score: {score}", False, (255, 255, 255))
+        screen.blit(score_surface, (SCREEN_WIDTH / 3, 200))
 
-            highscore_surface = font.render(f"Highscore: {highscore}", False, (255, 255, 255))
-            screen.blit(highscore_surface, (SCREEN_WIDTH / 3, 300))
+        highscore_surface = font.render(f"Highscore: {highscore}", False, (255, 255, 255))
+        screen.blit(highscore_surface, (SCREEN_WIDTH / 3, 300))
 
 
         pygame.display.flip()

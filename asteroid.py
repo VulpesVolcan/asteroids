@@ -29,8 +29,13 @@ class Asteroid(CircleShape):
     def update(self,dt):
         movement = self.velocity * dt
         self.position += movement
-        if self.radius == 5:
+        if self.ID != "N":
             self.color = "red"
+            movement = self.velocity * (dt * 2)
+            self.position += movement
+            
+            
+            
             return
         self.find_color(dt)
 

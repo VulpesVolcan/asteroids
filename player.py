@@ -13,6 +13,7 @@ class Player(CircleShape):
         self.cooldown = 0
         self.sub_cooldown = 0
 
+
     def triangle(self):
         forward = pygame.Vector2(0, 1).rotate(self.rotation)
         right = pygame.Vector2(0, 1).rotate(self.rotation + 90) * self.radius / 1.5
@@ -47,12 +48,14 @@ class Player(CircleShape):
         if keys[pygame.K_SPACE]:
             self.shoot()
 
-        if keys[pygame.K_m]:
+        if keys[pygame.K_n]:
             self.piercing()
 
-        if keys[pygame.K_n]:
+        if keys[pygame.K_m]:
             self.scatter()
 
+        #if keys[pygame.K_c]:
+        
     def move(self,dt):
         unit_vector = pygame.Vector2(0, 1)
         rotated_vector = unit_vector.rotate(self.rotation)
