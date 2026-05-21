@@ -9,12 +9,13 @@ def game_over_main(score):
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     dark_red = (139,0,0)
     screen.fill(dark_red)
-    
+    bonus = 0
 
     pygame.init()
     pygame.font.init()
-    font = pygame.font.SysFont("Arial", 90)
-    
+    go_font = pygame.font.SysFont("Arial", 90)
+    score_font = pygame.font.SysFont("Arial", 35)
+
     with open("highscore.txt", "r") as h:
         highscore = h.read()
 
@@ -30,12 +31,14 @@ def game_over_main(score):
 
 
     for ammo in AMMO:
-                if ammo == "Piercing":
-                    score += 5
-                elif ammo == "Scatter":
-                    score += 2
+        if ammo == "Piercing":
+            bonus += 5
+        elif ammo == "Scatter":
+            bonus += 2
+        elif ammo == "Warp":
+            bonus += 7
+            
 
-    
     while True:
         
         for event in pygame.event.get():
@@ -48,7 +51,6 @@ def game_over_main(score):
                     print("Game Over")
                     print(f"Score = {score}")
                     print(f"Highscore = {highscore}")
-                    print(f"Ammo = {AMMO}")
                     sys.exit()
             
             
@@ -57,21 +59,25 @@ def game_over_main(score):
             
         screen.fill(dark_red)
             
-        end_message = font.render(f"GAME OVER", False, (255,255,244))
+        end_message = go_font.render(f"GAME OVER", False, (255,255,244))
         screen.blit(end_message, (SCREEN_WIDTH / 3,  9))
             
-        restart_query = font.render(f"Try again? Y/N",False,(255,255,255))
-        screen.blit(restart_query, (SCREEN_WIDTH / 3, 400))
+        restart_query = go_font.render(f"Try again? Y/N",False,(255,255,255))
+        screen.blit(restart_query, (SCREEN_WIDTH / 3, 600))
             
-        score_surface = font.render(f"Score: {score}", False, (255, 255, 255))
+        score_surface = score_font.render(f"Score: {score}", False, (255, 255, 255))
         screen.blit(score_surface, (SCREEN_WIDTH / 3, 200))
 
-        highscore_surface = font.render(f"Highscore: {highscore}", False, (255, 255, 255))
-        screen.blit(highscore_surface, (SCREEN_WIDTH / 3, 300))
+        highscore_surface = score_font.render(f"Highscore: {highscore}", False, (255, 255, 255))
+        screen.blit(highscore_surface, (SCREEN_WIDTH / 3, 500))
 
-
+        bonus_surface = score_font.render(f"Bonus: {bonus}", False, (255,255,255))
+        screen.blit(bonus_surface, (SCREEN_WIDTH / 3, 300))
+        
+        tot_score_surface = score_font.render(f"Total Score: {(score + bonus)}", False, (255,255,255))
+        screen.blit(tot_score_surface, (SCREEN_WIDTH / 3, 400))
+        
         pygame.display.flip()
-        dt = timer.tick(60) / 1000
 
 
 

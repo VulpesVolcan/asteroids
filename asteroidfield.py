@@ -35,15 +35,15 @@ class AsteroidField(pygame.sprite.Sprite):
         self.spawn_timer = 0.0
 
     def spawn(self, radius, position, velocity):
-        random_num = random.randint(0,1000)
-        print(random_num)
-        if random_num > 950:
+        random_num = random.randint(0,10)
+        random_num2 = random.randint(0,10)
+        if random_num == 10 and random_num2 == 10:
             comet = Comet(position.x,position.y,8)
             comet.velocity = velocity
-        elif random_num > 850:
+        elif random_num > 7 and random_num < 9:
             volatile_asteroid = Volatile_Asteroid(position.x,position.y,45)
             volatile_asteroid.velocity = velocity
-        elif random_num < 1000:
+        elif random_num < 11:
             asteroid = Asteroid(position.x, position.y, radius,"N")
             asteroid.velocity = velocity
         

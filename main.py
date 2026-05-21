@@ -76,8 +76,9 @@ def play_game(screen,font):
                         AMMO.append("Piercing")
                     elif check_powerup.ID == "S":
                         AMMO.append("Scatter")
-                    else: AMMO.append("Shield")
-                    
+                    elif check_powerup.ID == "W":
+                        AMMO.append("Warp")
+                    else: AMMO.append("Sheild")
                     
                     check_powerup.kill()
        
@@ -87,7 +88,7 @@ def play_game(screen,font):
                 if check_asteroid.collides_with(check_shot):
                     
                     random_num = random.randint(0,100)
-                    random_num2 = random.randint(1,2)
+                    random_num2 = random.randint(1,4)
                     
                     check_asteroid.iframes -= dt
                     
@@ -109,9 +110,12 @@ def play_game(screen,font):
                     #Generates powerups
                     if random_num > 90:
                         if random_num2 == 1:
-                            Powerup(check_asteroid.position.x,check_asteroid.position.y,5,"P") 
-                        else: Powerup(check_asteroid.position.x,check_asteroid.position.y,5,"S")
-                            
+                            Powerup(check_asteroid.position.x,check_asteroid.position.y,5,"S") 
+                        elif random_num2 == 2: 
+                            Powerup(check_asteroid.position.x,check_asteroid.position.y,5,"P")
+                        elif random_num2 == 3:
+                            Powerup(check_asteroid.position.x,check_asteroid.position.y,5,"W")
+                        
                     
                     #Checks for piercing shots
                     if check_shot.radius <= 5:
@@ -133,12 +137,11 @@ def play_game(screen,font):
             #Draws ingame score/ammo counters
             score_surface = font.render(f"Score: {score}", False, (255, 255, 255))
             screen.blit(score_surface, (10, 10))
-            scatter = AMMO.count("Scatter")
-            piercing = AMMO.count("Piercing")
-            shield = AMMO.count("Shield")
-            ammo_surface = font.render(f"Scatter: {scatter}  Piercing {piercing}  Shield {shield}", False, (255, 255, 255))
-            screen.blit(ammo_surface, (950,10))
+            ammo_surface = font.render(f"""Scatter:{AMMO.count("Scatter")} Piercing:{AMMO.count("Piercing")} Shield:{AMMO.count("Shield")} Warp:{AMMO.count("Warp")}""" , False, (255, 255, 255))
+            screen.blit(ammo_surface, (875,10))
        
+
+
         #Renders sprites on the correct layer
         pygame.display.flip()
         

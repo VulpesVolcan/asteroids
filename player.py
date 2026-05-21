@@ -13,8 +13,6 @@ class Player(CircleShape):
         self.cooldown = 0
         self.sub_cooldown = 0
         self.boost_cooldown = 0
-        self.boosting = BOOSTING
-        self.time_held = 2
 
     def triangle(self):
         forward = pygame.Vector2(0, 1).rotate(self.rotation)
@@ -58,12 +56,8 @@ class Player(CircleShape):
             self.scatter()
         
     
-        #if keys[pygame.K_x]:
-            #if self.time_held >= 1:
-                #self.time_held -= 0.5
-                #self.boosting = True
-                #print(self.boosting)
-            #self.boost(dt)
+        if keys[pygame.K_x]:
+            self.warp(dt)
     
     def move(self,dt):
         unit_vector = pygame.Vector2(0, 1)
@@ -71,17 +65,14 @@ class Player(CircleShape):
         rotated_with_speed_vector = rotated_vector * PLAYER_SPEED * dt
         self.position += rotated_with_speed_vector
     
-    #def boost(self,dt):
-        #unit_vector = pygame.Vector2(0, 1)
-        #while self.boosting == True:
-            #if self.boost_cooldown <= 0:
-                
-                #self.boost_cooldown = PLAYER_BOOST_COOLDOWN
-           
-                #rotated_vector = unit_vector.rotate(self.rotation)
-                #rotated_with_speed_vector = rotated_vector * PLAYER_SPEED * dt 
-                #self.position += rotated_with_speed_vector * 5
-            #break
+    def warp(self,dt):
+        unit_vector = pygame.Vector2(0, 1)
+        if self.boost_cooldown <= 0 and "Warp" in AMMO:
+            self.boost_cooldown = PLAYER_BOOST_COOLDOWN
+            rotated_vector = unit_vector.rotate(self.rotation)
+            rotated_with_speed_vector = rotated_vector * PLAYER_SPEED * dt 
+            self.position += rotated_with_speed_vector * 70
+            AMMO.remove("Warp")
 
     def shoot(self):
         if self.cooldown > 0:
