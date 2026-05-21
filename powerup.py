@@ -13,5 +13,7 @@ class Powerup(CircleShape):
             self.color = "blue"
         elif self.ID == "P":
             self.color = "yellow"
-        else: self.color == "green"
+        elif self.ID == "W":
+            self.color = "green"
+        print(self.color)
         pygame.draw.circle(screen,self.color,self.position,self.radius)
