@@ -40,9 +40,9 @@ def play_game(screen,font):
     AsteroidField.containers = (updatable,)
     Powerup.containers = (powerups,drawable)
     Volatile_Asteroid.containers = (asteroids, updatable, drawable)
-    Comet.containers = (asteroids, updatable, drawable)
+    Comet.containers = (powerups, updatable, drawable)
 
-    #Initializes classe objects
+    #Initializes class objects
     field = AsteroidField()
     ship = Player(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2)
     
@@ -61,11 +61,10 @@ def play_game(screen,font):
         
         #Checks player/asteroid collisions and sends code to gameover
         for check_collision in asteroids:
-            if check_collision.collides_with(ship):
-                if check_collision.ID == "C":
-                    AMMO.append("Shield")
-                if "Sheild" in AMMO:
+            if check_collision.collides_with(ship): 
+                if "Shield" in AMMO:
                     AMMO.remove("Shield")
+                    check_collision.kill()
                     continue
                 log_event("player_hit")
                 return score
@@ -75,7 +74,11 @@ def play_game(screen,font):
                 if check_powerup.collides_with(ship):
                     if check_powerup.ID == "P":
                         AMMO.append("Piercing")
-                    else: AMMO.append("Scatter")
+                    elif check_powerup.ID == "S":
+                        AMMO.append("Scatter")
+                    else: AMMO.append("Shield")
+                    
+                    
                     check_powerup.kill()
        
        #Checks collision for asteroids and shots and deletes them accordingly
