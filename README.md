@@ -1,13 +1,17 @@
 Welcome to asteroids!
 
-The controls are w and s to move forward and backward 
+Shoot asteroids to get points
 
-a and d to rotate 
+Try to aim for a highscore!
 
-spacebar to shoot
 
-n for a piercing shot
+              **Controls**
+            Use wasd to move,
 
-and m for a split shot
+            Spacebar to shoot
 
-Have fun and leave feedback if you feel so inclined!
+            N and M to use special ammo,
+
+            And X to dash!
+
+            Have fun, and don't forget to leave a review/suggestion if you feel so inclined!
