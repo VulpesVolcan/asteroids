@@ -53,8 +53,6 @@ class Player(CircleShape):
 
         if keys[pygame.K_m]:
             self.scatter()
-
-        #if keys[pygame.K_c]:
         
     def move(self,dt):
         unit_vector = pygame.Vector2(0, 1)
