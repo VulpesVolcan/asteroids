@@ -13,7 +13,10 @@ from powerup import Powerup
 from gameover import game_over_main
 from volatileasteroid import Volatile_Asteroid
 from comet import Comet
-    
+from drone import Drone
+
+
+
 #Manages game logic
 def play_game(screen,font):
     
@@ -36,6 +39,7 @@ def play_game(screen,font):
     Piercing_Shot.containers = (shots,drawable,updatable)
     Scatter_Shot.containers = (shots,drawable,updatable)
     Player.containers = (updatable,drawable)
+    Drone.containers = (updatable,drawable)
     Asteroid.containers = (asteroids, updatable, drawable)
     AsteroidField.containers = (updatable,)
     Powerup.containers = (powerups,drawable)
@@ -78,8 +82,8 @@ def play_game(screen,font):
                         AMMO.append("Scatter")
                     elif check_powerup.ID == "W":
                         AMMO.append("Warp")
-                    else: AMMO.append("Sheild")
-                    
+                    else: AMMO.append("Shield")
+                    Drone(ship.position.x + 9,ship.position.y + 9,ship)
                     check_powerup.kill()
        
        #Checks collision for asteroids and shots and deletes them accordingly
