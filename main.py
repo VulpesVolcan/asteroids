@@ -25,6 +25,7 @@ def play_game(screen,font):
     score = SCORE
     dt = 0
     AMMO.clear()
+    drones = 0
 
     #Group defenition
     timer = pygame.time.Clock()
@@ -70,6 +71,16 @@ def play_game(screen,font):
                     AMMO.remove("Shield")
                     check_collision.kill()
                     continue
+                #if drones == 1:
+                    check_collision.kill()
+                    drone_1.kill()
+                    drones -= 1
+                    continue
+                #elif drones == 2:
+                    check_collision.kill()
+                    drone_2.kill()
+                    drones -= 1
+                    continue
                 log_event("player_hit")
                 return score
             
@@ -83,9 +94,17 @@ def play_game(screen,font):
                     elif check_powerup.ID == "W":
                         AMMO.append("Warp")
                     else: AMMO.append("Shield")
-                    Drone(ship.position.x + 9,ship.position.y + 9,ship)
                     check_powerup.kill()
-       
+                    
+                    #if drones == 0:
+                     #drone_1 = Drone(ship.position.x + 50,ship.position.y - 50,ship)
+                     #drones += 1
+                    #elif drones == 1:
+                     #drone_2 = Drone(ship.position.x - 50,ship.position.y - 50,ship)
+                     #drones += 1
+                    #elif drones == 2:
+                        #pass
+
        #Checks collision for asteroids and shots and deletes them accordingly
         for check_asteroid in asteroids:
             for check_shot in shots:

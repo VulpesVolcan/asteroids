@@ -38,7 +38,7 @@ class Volatile_Asteroid(Asteroid):
 
         vel1 = self.velocity.rotate(random.uniform(0,100))
         vel2 = self.velocity.rotate(random.uniform(0,100))
-        vel3 = self.velocity.rotate(random.uniform(-100,-0))
+        vel3 = self.velocity.rotate(random.uniform(-100,0))
         vel4 = self.velocity.rotate(random.uniform(-100,0))
         shard_radius = 5
 

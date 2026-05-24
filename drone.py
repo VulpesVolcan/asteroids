@@ -11,6 +11,7 @@ class Drone(Player):
    def __init__(self,x,y,parent):
       super().__init__(x,y)
       self.parent = parent
+      self.offset = 5
 
    def triangle(self):
         forward = pygame.Vector2(0, 1).rotate(self.rotation)
@@ -28,12 +29,7 @@ class Drone(Player):
         self.sub_cooldown -= dt
         self.boost_cooldown -= dt
         keys = pygame.key.get_pressed()
-
-        if keys[pygame.K_a]:
-           Drone.rotate(self,-dt)
-
-        if keys[pygame.K_d]:
-           self.rotate(dt)
+        self.rotation = self.parent.rotation
         
         if keys[pygame.K_w]:
             self.move(dt)
