@@ -23,9 +23,11 @@ def play_game(screen,font):
 
     #Resets variables upon restart
     score = SCORE
+    streak = 0
     dt = 0
     AMMO.clear()
     drones = 0
+    lives = 1
 
     #Group defenition
     timer = pygame.time.Clock()
@@ -67,19 +69,24 @@ def play_game(screen,font):
         #Checks player/asteroid collisions and sends code to gameover
         for check_collision in asteroids:
             if check_collision.collides_with(ship): 
+                streak = 0
                 if "Shield" in AMMO:
                     AMMO.remove("Shield")
                     check_collision.kill()
                     continue
-                #if drones == 1:
+                if drones == 1:
                     check_collision.kill()
                     drone_1.kill()
                     drones -= 1
                     continue
-                #elif drones == 2:
+                elif drones == 2:
                     check_collision.kill()
                     drone_2.kill()
                     drones -= 1
+                    continue
+                if lives > 1:
+                    check_collision.kill()
+                    lives -= 1
                     continue
                 log_event("player_hit")
                 return score
@@ -93,25 +100,32 @@ def play_game(screen,font):
                         AMMO.append("Scatter")
                     elif check_powerup.ID == "W":
                         AMMO.append("Warp")
+                    elif check_powerup.ID == "D":
+                        if drones == 0:
+                            drone_1 = Drone(ship.position.x + 50,ship.position.y - 50,ship)
+                            drones += 1
+                        elif drones == 1:
+                            drone_2 = Drone(ship.position.x - 50,ship.position.y - 50,ship)
+                            drones += 1
+                        elif drones == 2:
+                            score += 50
+
+                    
+                    
+                    
                     else: AMMO.append("Shield")
                     check_powerup.kill()
                     
-                    #if drones == 0:
-                     #drone_1 = Drone(ship.position.x + 50,ship.position.y - 50,ship)
-                     #drones += 1
-                    #elif drones == 1:
-                     #drone_2 = Drone(ship.position.x - 50,ship.position.y - 50,ship)
-                     #drones += 1
-                    #elif drones == 2:
-                        #pass
-
+                    
        #Checks collision for asteroids and shots and deletes them accordingly
         for check_asteroid in asteroids:
             for check_shot in shots:
                 if check_asteroid.collides_with(check_shot):
                     
                     random_num = random.randint(0,100)
-                    random_num2 = random.randint(1,4)
+                    random_num2 = random.randint(0,4)
+                    random_num3 = random.randint(0,10)
+                    
                     
                     check_asteroid.iframes -= dt
                     
@@ -124,15 +138,21 @@ def play_game(screen,font):
                         continue
                     if check_asteroid.ID == "V":
                         check_asteroid.detonate()
+                        score -= (check_asteroid.radius // 10)
+                        streak -= (check_asteroid.radius // 10)
                         if check_asteroid.times_hit > 2:
                             random_num = 100
+                            score += (check_asteroid.radius // 10)
+                            streak += (check_asteroid.radius // 10)
                         else: random_num = 0
                     else: check_asteroid.split()
 
 
                     #Generates powerups
                     if random_num > 90:
-                        if random_num2 == 1:
+                        if random_num2 == 4 and random_num3 == 4:
+                            Powerup(check_asteroid.position.x,check_asteroid.position.y,5,"D") 
+                        elif random_num2 == 1:
                             Powerup(check_asteroid.position.x,check_asteroid.position.y,5,"S") 
                         elif random_num2 == 2: 
                             Powerup(check_asteroid.position.x,check_asteroid.position.y,5,"P")
@@ -144,8 +164,12 @@ def play_game(screen,font):
                     if check_shot.radius <= 5:
                         check_shot.kill()
                     
-                    #Updates score based on asteroid size
+                    #Updates score and streak based on asteroid size
                     score += (check_asteroid.radius // 10)
+                    streak += (check_asteroid.radius // 10)
+                    if streak >= 500:
+                        lives += 1 
+                        streak = 0
 
         #Logs the state of the program
         log_state()
@@ -158,7 +182,7 @@ def play_game(screen,font):
             sprite.draw(screen)
             
             #Draws ingame score/ammo counters
-            score_surface = font.render(f"Score: {score}", False, (255, 255, 255))
+            score_surface = font.render(f"Score: {score} Lives: {lives} Streak: {streak}", False, (255, 255, 255))
             screen.blit(score_surface, (10, 10))
             ammo_surface = font.render(f"""Scatter:{AMMO.count("Scatter")} Piercing:{AMMO.count("Piercing")} Shield:{AMMO.count("Shield")} Warp:{AMMO.count("Warp")}""" , False, (255, 255, 255))
             screen.blit(ammo_surface, (875,10))
